@@ -20,6 +20,8 @@ public class FinanceiroApplication {
 		var app = new SpringApplication(FinanceiroApplication.class);
 //		app.addListeners(new Base64ProtocolResolver());
 		app.run(args);
+		
+		System.out.println("");
 	}
 
 }
