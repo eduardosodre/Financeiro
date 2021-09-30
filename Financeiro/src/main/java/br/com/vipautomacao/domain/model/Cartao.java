@@ -16,17 +16,24 @@ import javax.persistence.ManyToOne;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name = "categoria")
-public class Categoria {
+@Table(name = "cartao")
+public class Cartao {
 
 	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="CODIGO"  )
 	private Integer codigo;
-	@Column(name="descricao"  )
-	private String descricao;
 	@ManyToOne
-	@JoinColumn(name="usuario")
-	private Usuario usuario;
+	@JoinColumn(name="instituicao")
+	private InstituicaoFinanceira instituicao;
+	@Column(name="fechamento"  )
+	private Integer fechamento;
+	@Column(name="vencimento"  )
+	private Integer vencimento;
+	@Column(name="limite"  )
+	private Double limite;
+	@ManyToOne
+	@JoinColumn(name="contaPagamento")
+	private Conta contaPagamento;
 }

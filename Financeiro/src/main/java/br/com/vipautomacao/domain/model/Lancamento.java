@@ -10,14 +10,15 @@ import javax.persistence.Id;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import javax.persistence.Table;
+import java.util.Date;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name = "categoria")
-public class Categoria {
+@Table(name = "lancamento")
+public class Lancamento {
 
 	@EqualsAndHashCode.Include
 	@Id
@@ -26,7 +27,27 @@ public class Categoria {
 	private Integer codigo;
 	@Column(name="descricao"  )
 	private String descricao;
+	@Column(name="valor"  )
+	private Double valor;
+	@Column(name="data"  )
+	private Date data;
 	@ManyToOne
-	@JoinColumn(name="usuario")
-	private Usuario usuario;
+	@JoinColumn(name="conta")
+	private Conta conta;
+	@ManyToOne
+	@JoinColumn(name="categoria")
+	private Categoria categoria;
+	@Column(name="tipoLancamento"  )
+	private String tipoLancamento;
+	@ManyToOne
+	@JoinColumn(name="conta2")
+	private Conta conta2;
+	@Column(name="observacao"  )
+	private String observacao;
+	@Column(name="parcelaFixa"  )
+	private Boolean parcelaFixa;
+	@Column(name="qtdParcela"  )
+	private Integer qtdParcela;
+	@Column(name="codigoPai"  )
+	private Integer codigoPai;
 }
