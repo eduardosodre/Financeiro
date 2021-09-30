@@ -54,7 +54,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
 	@Autowired
 	private UsuarioQueryService usuarioQuery;
 
-	//@CheckSecurity.Usuario.PodeConsultar
+	// @CheckSecurity.Usuario.PodeConsultar
 	@Override
 	@GetMapping
 	public Page<UsuarioModel> listar(@PageableDefault(size = 10) Pageable pageable) {
