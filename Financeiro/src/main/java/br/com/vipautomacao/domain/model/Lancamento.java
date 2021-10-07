@@ -50,4 +50,7 @@ public class Lancamento {
 	private Integer qtdParcela;
 	@Column(name="codigoPai"  )
 	private Integer codigoPai;
+	@ManyToOne
+	@JoinColumn(name="usuario")
+	private Usuario usuario;
 }

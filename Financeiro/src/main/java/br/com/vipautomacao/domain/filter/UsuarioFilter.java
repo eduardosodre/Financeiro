@@ -7,6 +7,9 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import java.util.Date;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Setter
 @Getter
@@ -27,21 +30,21 @@ public class UsuarioFilter {
 
 	@DateTimeFormat(iso = ISO.DATE_TIME)
 	@ApiModelProperty(example = "2019-10-30T00:00:00Z", value = "dataNascimento para filtro da pesquisa")
-	private OffsetDateTime dataNascimentoInicio;
+	private Date dataNascimentoInicio;
 
 	@DateTimeFormat(iso = ISO.DATE_TIME)
 	@ApiModelProperty(example = "2019-10-30T00:00:00Z", value = "dataNascimento para filtro da pesquisa")
-	private OffsetDateTime dataNascimentoFim;
+	private Date dataNascimentoFim;
 
 	@ApiModelProperty(example = "Texto", value = "sexo para filtro da pesquisa")
 	private String sexo;
 
 	@DateTimeFormat(iso = ISO.DATE_TIME)
 	@ApiModelProperty(example = "2019-10-30T00:00:00Z", value = "acesso para filtro da pesquisa")
-	private OffsetDateTime acessoInicio;
+	private Date acessoInicio;
 
 	@DateTimeFormat(iso = ISO.DATE_TIME)
 	@ApiModelProperty(example = "2019-10-30T00:00:00Z", value = "acesso para filtro da pesquisa")
-	private OffsetDateTime acessoFim;
+	private Date acessoFim;
 
 }

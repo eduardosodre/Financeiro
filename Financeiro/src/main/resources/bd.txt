@@ -1,0 +1,71 @@
+create table banco (codigo integer not null auto_increment, imagem text, nome varchar(100), primary key (codigo)) ;
+create table cartao (codigo integer not null auto_increment, fechamento integer, limite double precision, vencimento integer, conta_pagamento integer, instituicao integer, usuario integer, primary key (codigo)) ;
+create table categoria (codigo integer not null auto_increment, descricao varchar(50), usuario integer null, tipo varchar(1), primary key (codigo)) ;
+create table conta (codigo integer not null auto_increment, descricao varchar(150), nome varchar(100), saldo_inicial double precision, banco integer, usuario integer, primary key (codigo)) ;
+create table instituicaofinanceira (codigo integer not null auto_increment, imagem text, nome varchar(100), primary key (codigo)) ;
+create table lancamento (codigo integer not null auto_increment, codigo_pai integer null, data datetime, descricao varchar(100), observacao varchar(255), parcela_fixa bit, qtd_parcela integer, tipo_lancamento varchar(1), valor double precision, categoria integer, conta integer, conta2 integer, usuario integer, primary key (codigo)) ;
+create table usuario (codigo integer not null auto_increment, acesso datetime, data_nascimento datetime, email varchar(180), nome varchar(100), senha varchar(200), sexo varchar(10), primary key (codigo)) ;
+
+create table grupo (codigo integer not null auto_increment, nome varchar(100) not null, primary key (codigo));
+create table grupo_permissao (grupo_id integer not null, permissao_id integer not null, primary key (grupo_id, permissao_id));
+create table permissao (codigo integer not null auto_increment, nome varchar(100), descricao varchar(100), primary key (codigo));
+create table usuario_grupo (usuario_id integer not null, grupo_id integer not null, primary key (usuario_id, grupo_id));
+
+
+
+alter table cartao add constraint fkCartaoConta foreign key (conta_pagamento) references conta (codigo);
+alter table cartao add constraint fkCartaoInstituicao foreign key (instituicao) references instituicaofinanceira (codigo);
+alter table cartao add constraint fkCartaoUsuario foreign key (usuario) references usuario (codigo);
+alter table categoria add constraint fkCategoriaUsuario foreign key (usuario) references usuario (codigo);
+alter table conta add constraint fkcontabanco foreign key (banco) references banco (codigo);
+alter table conta add constraint fkContaUsuario foreign key (usuario) references usuario (codigo);
+alter table lancamento add constraint fkLancamentoCategoria foreign key (categoria) references categoria (codigo);
+alter table lancamento add constraint fkLancamentoConta1 foreign key (conta) references conta (codigo);
+alter table lancamento add constraint fkLancamentoConta2 foreign key (conta2) references conta (codigo);
+alter table lancamento add constraint fkLancamentoUsuario foreign key (usuario) references usuario (codigo);
+
+alter table grupo_permissao add constraint grupo_permissao1 foreign key (permissao_id) references permissao (codigo);
+alter table grupo_permissao add constraint grupo_permissao2 foreign key (grupo_id) references grupo (codigo);
+alter table usuario_grupo add constraint usuarioGrupo1 foreign key (grupo_id) references grupo (codigo);
+alter table usuario_grupo add constraint usuarioGrupo2 foreign key (usuario_id) references usuario (codigo);
+
+insert into banco (codigo, imagem, nome) values (1, "https://fastly.4sqi.net/img/general/200x200/9673309_MmZlsjTzz2Nf2TCjKe-l9G0GJ0rGRxho6wOZdNntLIk.jpg", "Bradesco");
+insert into banco (codigo, imagem, nome) values (2, "https://www.rif4books.com.br/images/bc/itau.png", "Itau");
+
+insert into instituicaofinanceira (codigo, nome, imagem) values (1, "Porto Seguro", "https://seeklogo.com/images/P/porto-seguro-novo-logo-444639E178-seeklogo.com.png");
+insert into instituicaofinanceira (codigo, nome, imagem) values (2, "C6 Bank", "https://miro.medium.com/fit/c/262/262/1*cyip3mWB9fNgDeVIEpZMuQ.jpeg");
+
+insert into usuario (codigo, acesso, data_nascimento, email, nome, senha, sexo) values (1, now(), "1989-11-21", "eduardo_nsodre@hotmail.com", "Eduardo Nicolini Sodre da Silva", "$2a$12$V9Pj/dYugHZTSoU46vJl6OtPPuiMPH2FeEv08SE1dKxcmpTFJRTSe", "Masculino");
+insert into usuario (codigo, acesso, data_nascimento, email, nome, senha, sexo) values (2, now(), "1987-09-15", "paulo@vipautomacao.com.br", "Paulo Victor Batista Binatto", "$2a$12$9VgVhPuWu8rGF21Fug0Xue6/oK7VsKkwVzHiXRsutDRTJxbMhFtym", "Masculino");
+
+insert into conta (codigo, descricao, nome, saldo_inicial, banco) values (1, "Bradesco", "Bradesco", 100.50, 1);
+insert into conta (codigo, descricao, nome, saldo_inicial, banco) values (2, "Itau Desc", "Itau", 0, 2);
+
+insert into cartao (codigo, fechamento, limite, vencimento, conta_pagamento, instituicao, usuario) values (1, 23, 28000, 13, 1, 1, 1);
+
+insert into categoria (codigo, descricao, tipo) values (1, "Alimentação", "S");
+insert into categoria (codigo, descricao, tipo) values (2, "Assinatura", "S");
+insert into categoria (codigo, descricao, tipo) values (3, "Salário", "E");
+insert into categoria (codigo, descricao, tipo) values (4, "Rendimento", "E");
+
+insert into lancamento (codigo, codigo_pai, data, descricao, observacao, parcela_fixa, qtd_parcela, tipo_lancamento, valor, categoria, conta, conta2, usuario) values (1, null, now(), "Entrada de 100 reais", "", false, 1, "E", 100, 3, 1, null, 1);
+
+create table oauth_client_details (client_id varchar(255), resource_ids varchar(256), client_secret varchar(256), scope varchar(256), authorized_grant_types varchar(256), web_server_redirect_uri varchar(256), authorities varchar(256), access_token_validity integer, refresh_token_validity integer, additional_information varchar(4096), autoapprove varchar(256), primary key (client_id)) engine=innodb default charset=utf8;
+
+insert into oauth_client_details (client_id, resource_ids, client_secret, scope, authorized_grant_types, web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity, additional_information, autoapprove) values ("usuario", "", "$2a$12$V9Pj/dYugHZTSoU46vJl6OtPPuiMPH2FeEv08SE1dKxcmpTFJRTSe", "READ,WRITE", "password" , "", "CONSULTAR_PEDIDOS,GERAR_RELATORIOS", null, null, null, null);
+
+insert into grupo (codigo, nome) values (1, "Administrador");
+insert into grupo (codigo, nome) values (2, "Usuario");
+
+insert into permissao (codigo, nome, descricao) values (1, "GERENCIAR_USUARIOS", "Permite Gerenciar Usuários");
+insert into permissao (codigo, nome, descricao) values (2, "GERENCIAR_CATEGORIAS", "Permite Gerenciar Categorias");
+insert into permissao (codigo, nome, descricao) values (3, "GERENCIAR_BANCOS", "Permite Gerenciar Bancos");
+insert into permissao (codigo, nome, descricao) values (4, "GERENCIAR_INSTITUICOES", "Permite Gerenciar Instituições");
+
+insert into grupo_permissao (grupo_id, permissao_id) values (1, 1);
+insert into grupo_permissao (grupo_id, permissao_id) values (1, 2);
+insert into grupo_permissao (grupo_id, permissao_id) values (1, 3);
+insert into grupo_permissao (grupo_id, permissao_id) values (1, 4);
+
+insert into usuario_grupo (usuario_id, grupo_id) values (2, 1);
+

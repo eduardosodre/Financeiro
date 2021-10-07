@@ -36,4 +36,7 @@ public class Cartao {
 	@ManyToOne
 	@JoinColumn(name="contaPagamento")
 	private Conta contaPagamento;
+	@ManyToOne
+	@JoinColumn(name="usuario")
+	private Usuario usuario;
 }

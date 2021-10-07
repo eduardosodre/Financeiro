@@ -21,14 +21,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.fasterxml.classmate.TypeResolver;
 
-import br.com.vipautomacao.api.exceptionhandler.Problem;
-import br.com.vipautomacao.api.v1.openapi.model.PageableModelOpenApi;
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.OAuthBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseMessageBuilder;
+import springfox.documentation.schema.AlternateTypeRules;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.AuthorizationScope;
@@ -43,6 +42,9 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import br.com.vipautomacao.api.exceptionhandler.Problem;
+import br.com.vipautomacao.api.v1.openapi.model.PageableModelOpenApi;
 
 @Configuration
 @EnableSwagger2
@@ -71,15 +73,21 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 				.securitySchemes(Arrays.asList(securityScheme())).securityContexts(Arrays.asList(securityContext()))				.apiInfo(apiInfoV1())
 						.tags(
 
-						new Tag("Usuarios", "Gerencia as Usuario")						);
+						new Tag("Usuarios", "Gerencia as Usuario"),
+						new Tag("Bancos", "Gerencia as Banco"),
+						new Tag("InstituicaoFinanceiras", "Gerencia as InstituicaoFinanceira"),
+						new Tag("Contas", "Gerencia as Conta"),
+						new Tag("Cartaos", "Gerencia as Cartao"),
+						new Tag("Lancamentos", "Gerencia as Lancamento"),
+						new Tag("Categorias", "Gerencia as Categoria")						);
 	}
 	
 	private SecurityScheme securityScheme() {
-		return new OAuthBuilder().name("ControlFinanceiro").grantTypes(grantTypes()).scopes(scopes()).build();
+		return new OAuthBuilder().name("VipAutomacao").grantTypes(grantTypes()).scopes(scopes()).build();
 	}
 
 	private SecurityContext securityContext() {
-		var securityReference = SecurityReference.builder().reference("ControlFinanceiro")
+		var securityReference = SecurityReference.builder().reference("VipAutomacao")
 				.scopes(scopes().toArray(new AuthorizationScope[0])).build();
 
 		return SecurityContext.builder().securityReferences(Arrays.asList(securityReference))

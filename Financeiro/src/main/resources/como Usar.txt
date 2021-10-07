@@ -1,0 +1,13 @@
+https://bcrypt-generator.com/
+esse site para configurar as senhas
+
+executar o bd.
+
+
+usuario de acesso
+usuario 1234
+
+
+usuario de entrada
+eduardo_nsodre@hotmail.com
+1234

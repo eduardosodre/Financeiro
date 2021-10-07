@@ -1,7 +1,7 @@
 package br.com.vipautomacao.api.exceptionhandler;
 
 import java.time.OffsetDateTime;
-//import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.AccessDeniedException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -206,7 +206,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, problem, headers, status, request);
 	}
 
-	/*@ExceptionHandler(AccessDeniedException.class)
+	@ExceptionHandler(AccessDeniedException.class)
 	public ResponseEntity<?> handleEntidadeNaoEncontrada(AccessDeniedException ex, WebRequest request) {
 
 		HttpStatus status = HttpStatus.FORBIDDEN;
@@ -219,9 +219,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 				.build();
 
 		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
-	}*/
-	
-	
+	}
 	@ExceptionHandler(EntidadeNaoEncontradaException.class)
 	public ResponseEntity<?> handleEntidadeNaoEncontrada(EntidadeNaoEncontradaException ex,
 			WebRequest request) {

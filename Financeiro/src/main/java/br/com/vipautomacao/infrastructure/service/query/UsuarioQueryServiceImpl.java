@@ -1,18 +1,20 @@
 package br.com.vipautomacao.infrastructure.service.query;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.Predicate;
-
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-
+import org.springframework.data.domain.Pageable;
 import br.com.vipautomacao.domain.filter.UsuarioFilter;
 import br.com.vipautomacao.domain.model.Usuario;
 import br.com.vipautomacao.domain.service.query.UsuarioQueryService;
+
+import br.com.vipautomacao.domain.model.Usuario;
 
 @Repository
 public class UsuarioQueryServiceImpl implements UsuarioQueryService {

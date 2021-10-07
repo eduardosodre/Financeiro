@@ -33,4 +33,7 @@ public class Conta {
 	private Double saldoInicial;
 	@Column(name="descricao"  )
 	private String descricao;
+	@ManyToOne
+	@JoinColumn(name="usuario")
+	private Usuario usuario;
 }

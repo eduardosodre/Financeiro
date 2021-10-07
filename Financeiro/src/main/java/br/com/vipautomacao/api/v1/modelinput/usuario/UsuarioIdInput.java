@@ -5,6 +5,7 @@ import javax.validation.constraints.NotNull;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import java.util.Date;
 @Setter
 @Getter
 public class UsuarioIdInput {
