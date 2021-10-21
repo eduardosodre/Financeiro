@@ -1,17 +1,19 @@
 package br.com.vipautomacao.domain.model;
-import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import javax.persistence.Table;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -39,4 +41,10 @@ public class Cartao {
 	@ManyToOne
 	@JoinColumn(name="usuario")
 	private Usuario usuario;
+	
+	
+	private Boolean cancelado;
+	private OffsetDateTime dataCancel;
+	@CreationTimestamp
+	private OffsetDateTime dataCadastro;
 }

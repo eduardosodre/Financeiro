@@ -1,5 +1,6 @@
 package br.com.vipautomacao.domain.model;
 
+import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -35,7 +36,7 @@ public class Usuario {
 	@Column(name = "senha")
 	private String senha;
 	@Column(name = "dataNascimento")
-	private Date dataNascimento;
+	private OffsetDateTime dataNascimento;
 	@Column(name = "sexo")
 	private String sexo;
 	@Column(name = "acesso")

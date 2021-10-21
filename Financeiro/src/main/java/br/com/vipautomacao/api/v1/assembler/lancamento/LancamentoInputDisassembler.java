@@ -18,9 +18,8 @@ public class LancamentoInputDisassembler {
 		return modelMapper.map(restauranteInput, Lancamento.class);
 	}
 	public void copyToDomainObject(LancamentoInput lancamentoInput, Lancamento lancamento) {
-		// Para evitar org.hibernate.HibernateException: identifier of an instance of 
-		// br.com.vipautomacao.domain.model.Lancamento was altered from 1 to 2
 
+		lancamento.setCategoria(new Categoria());
 		if(lancamento.getConta() == null){
 			lancamento.setConta(new Conta());
 		}

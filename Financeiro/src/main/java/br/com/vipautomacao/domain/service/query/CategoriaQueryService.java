@@ -7,5 +7,7 @@ import br.com.vipautomacao.domain.model.Categoria;
 public interface CategoriaQueryService {
 
 	List<Categoria> consultaPorFiltro(CategoriaFilter filtro, String timeOffset, Pageable pageable);
+
+	List<Categoria> consultaPorUsuario(Integer usuario, Pageable pageable);
 	
 }

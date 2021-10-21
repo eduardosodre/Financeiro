@@ -7,5 +7,7 @@ import br.com.vipautomacao.domain.model.Conta;
 public interface ContaQueryService {
 
 	List<Conta> consultaPorFiltro(ContaFilter filtro, String timeOffset, Pageable pageable);
+
+	List<Conta> consultaPorUsuario(Integer usuario, Pageable pageable);
 	
 }

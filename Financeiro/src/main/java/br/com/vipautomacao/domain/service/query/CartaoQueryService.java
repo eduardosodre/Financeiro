@@ -7,5 +7,7 @@ import br.com.vipautomacao.domain.model.Cartao;
 public interface CartaoQueryService {
 
 	List<Cartao> consultaPorFiltro(CartaoFilter filtro, String timeOffset, Pageable pageable);
+
+	List<Cartao> consultaPorUsuario(Integer usuario, Pageable pageable);
 	
 }

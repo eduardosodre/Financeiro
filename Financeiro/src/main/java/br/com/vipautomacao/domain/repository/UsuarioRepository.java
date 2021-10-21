@@ -11,4 +11,5 @@ import br.com.vipautomacao.domain.model.Usuario;
 public interface UsuarioRepository extends CustomJpaRepository<Usuario, Integer> {
 
 	Optional<Usuario> findByEmail(String email);
+	
 }

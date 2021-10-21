@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.data.domain.Pageable;
 import br.com.vipautomacao.domain.filter.CartaoFilter;
 import br.com.vipautomacao.domain.model.Cartao;
+import br.com.vipautomacao.domain.model.Lancamento;
 import br.com.vipautomacao.domain.service.query.CartaoQueryService;
 
 import br.com.vipautomacao.domain.model.Cartao;
@@ -71,6 +72,24 @@ public class CartaoQueryServiceImpl implements CartaoQueryService {
 		}
 		query.where(predicates.toArray(new Predicate[0]));
 		
+		return manager.createQuery(query).getResultList();
+	}
+	
+	@Override
+	public List<Cartao> consultaPorUsuario(Integer usuario, Pageable pageable) {
+		var builder = manager.getCriteriaBuilder();
+		var query = builder.createQuery(Cartao.class);
+		var root = query.from(Cartao.class);
+		var predicates = new ArrayList<Predicate>();
+
+		if(usuario != null) {
+			predicates.add(builder.equal(root.get("usuario"), usuario));
+		}
+		predicates.add(builder.equal(root.get("cancelado"), false));
+
+		
+		query.where(predicates.toArray(new Predicate[0]));
+
 		return manager.createQuery(query).getResultList();
 	}
 }

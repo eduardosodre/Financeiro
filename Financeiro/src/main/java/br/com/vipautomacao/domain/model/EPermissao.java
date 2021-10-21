@@ -1,0 +1,24 @@
+package br.com.vipautomacao.domain.model;
+
+public enum EPermissao {
+
+	GERENCIAR_BANCO("GERENCIAR_BANCOS"),
+	GERENCIAR_CARTAO("GERENCIAR_CARTOES"),
+	GERENCIAR_CATEGORIA("GERENCIAR_CATEGORIAS"),
+	GERENCIAR_CONTA("GERENCIAR_CONTAS"),
+	GERENCIAR_GRUPO("GERENCIAR_GRUPO"),
+	GERENCIAR_INSTITUICAO("GERENCIAR_INSTITUICOES"),
+	GERENCIAR_LANCAMENTO("GERENCIAR_LANCAMENTOS"),
+	GERENCIAR_PERMISSAO("GERENCIAR_PERMISSOES"),
+	GERENCIAR_USUARIO("GERENCIAR_USUARIOS");
+	
+	private String descricao;
+	
+	EPermissao(String descricao) {
+		this.descricao = descricao;
+	}
+	
+	public String getDescricao() {
+		return this.descricao;
+	}
+}

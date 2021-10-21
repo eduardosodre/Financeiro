@@ -1,5 +1,7 @@
 package br.com.vipautomacao.domain.filter;
+
 import java.time.OffsetDateTime;
+import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
@@ -7,9 +9,6 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.Date;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 @Setter
 @Getter
@@ -30,11 +29,11 @@ public class LancamentoFilter {
 
 	@DateTimeFormat(iso = ISO.DATE_TIME)
 	@ApiModelProperty(example = "2019-10-30T00:00:00Z", value = "data para filtro da pesquisa")
-	private Date dataInicio;
+	private OffsetDateTime dataInicio;
 
+	@ApiModelProperty(example = "2019-11-01T10:00:00Z", value = "Data/hora de criação final para filtro da pesquisa")
 	@DateTimeFormat(iso = ISO.DATE_TIME)
-	@ApiModelProperty(example = "2019-10-30T00:00:00Z", value = "data para filtro da pesquisa")
-	private Date dataFim;
+	private OffsetDateTime dataFim;
 
 	@ApiModelProperty(example = "1", value = "conta para filtro da pesquisa")
 	private Integer conta;

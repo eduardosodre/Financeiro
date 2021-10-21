@@ -1,9 +1,9 @@
 create table banco (codigo integer not null auto_increment, imagem text, nome varchar(100), primary key (codigo)) ;
-create table cartao (codigo integer not null auto_increment, fechamento integer, limite double precision, vencimento integer, conta_pagamento integer, instituicao integer, usuario integer, primary key (codigo)) ;
+create table cartao (codigo integer not null auto_increment, fechamento integer, limite double precision, vencimento integer, conta_pagamento integer, instituicao integer, usuario integer, cancelado char(1) default false, data_cancel datetime, data_cadastro datetime, primary key (codigo)) ;
 create table categoria (codigo integer not null auto_increment, descricao varchar(50), usuario integer null, tipo varchar(1), primary key (codigo)) ;
-create table conta (codigo integer not null auto_increment, descricao varchar(150), nome varchar(100), saldo_inicial double precision, banco integer, usuario integer, primary key (codigo)) ;
+create table conta (codigo integer not null auto_increment, descricao varchar(150), nome varchar(100), saldo_inicial double precision, saldo_final double precision, banco integer, usuario integer, cancelado char(1) default false, data_cancel datetime, data_cadastro datetime, primary key (codigo)) ;
 create table instituicaofinanceira (codigo integer not null auto_increment, imagem text, nome varchar(100), primary key (codigo)) ;
-create table lancamento (codigo integer not null auto_increment, codigo_pai integer null, data datetime, descricao varchar(100), observacao varchar(255), parcela_fixa bit, qtd_parcela integer, tipo_lancamento varchar(1), valor double precision, categoria integer, conta integer, conta2 integer, usuario integer, primary key (codigo)) ;
+create table lancamento (codigo integer not null auto_increment, codigo_pai integer null, data datetime, descricao varchar(100), observacao varchar(255), parcela_fixa bit, qtd_parcela integer, tipo_lancamento varchar(1), valor double precision, categoria integer, conta integer, conta2 integer, usuario integer, cancelado char(1) default false, data_cancel datetime, data_cadastro datetime, pago char(1), primary key (codigo)) ;
 create table usuario (codigo integer not null auto_increment, acesso datetime, data_nascimento datetime, email varchar(180), nome varchar(100), senha varchar(200), sexo varchar(10), primary key (codigo)) ;
 
 create table grupo (codigo integer not null auto_increment, nome varchar(100) not null, primary key (codigo));
@@ -11,6 +11,7 @@ create table grupo_permissao (grupo_id integer not null, permissao_id integer no
 create table permissao (codigo integer not null auto_increment, nome varchar(100), descricao varchar(100), primary key (codigo));
 create table usuario_grupo (usuario_id integer not null, grupo_id integer not null, primary key (usuario_id, grupo_id));
 
+create table oauth_client_details (client_id varchar(255), resource_ids varchar(256), client_secret varchar(256), scope varchar(256), authorized_grant_types varchar(256), web_server_redirect_uri varchar(256), authorities varchar(256), access_token_validity integer, refresh_token_validity integer, additional_information varchar(4096), autoapprove varchar(256), primary key (client_id)) engine=innodb default charset=utf8;
 
 
 alter table cartao add constraint fkCartaoConta foreign key (conta_pagamento) references conta (codigo);
@@ -29,28 +30,55 @@ alter table grupo_permissao add constraint grupo_permissao2 foreign key (grupo_i
 alter table usuario_grupo add constraint usuarioGrupo1 foreign key (grupo_id) references grupo (codigo);
 alter table usuario_grupo add constraint usuarioGrupo2 foreign key (usuario_id) references usuario (codigo);
 
+
+delete from lancamento;
+delete from cartao;
+delete from instituicaofinanceira;
+delete from categoria;
+delete from conta;
+delete from usuario_grupo;
+delete from grupo_permissao;
+delete from grupo;
+delete from permissao;
+delete from banco;
+delete from usuario;
+delete from oauth_client_details;
+
 insert into banco (codigo, imagem, nome) values (1, "https://fastly.4sqi.net/img/general/200x200/9673309_MmZlsjTzz2Nf2TCjKe-l9G0GJ0rGRxho6wOZdNntLIk.jpg", "Bradesco");
 insert into banco (codigo, imagem, nome) values (2, "https://www.rif4books.com.br/images/bc/itau.png", "Itau");
+insert into banco (codigo, imagem, nome) values (3, "https://www.rif4books.com.br/images/bc/santander.png", "Santander");
+insert into banco (codigo, imagem, nome) values (4, "https://www.rif4books.com.br/images/bc/santander.png", "Banco do Brasil");
 
 insert into instituicaofinanceira (codigo, nome, imagem) values (1, "Porto Seguro", "https://seeklogo.com/images/P/porto-seguro-novo-logo-444639E178-seeklogo.com.png");
 insert into instituicaofinanceira (codigo, nome, imagem) values (2, "C6 Bank", "https://miro.medium.com/fit/c/262/262/1*cyip3mWB9fNgDeVIEpZMuQ.jpeg");
 
 insert into usuario (codigo, acesso, data_nascimento, email, nome, senha, sexo) values (1, now(), "1989-11-21", "eduardo_nsodre@hotmail.com", "Eduardo Nicolini Sodre da Silva", "$2a$12$V9Pj/dYugHZTSoU46vJl6OtPPuiMPH2FeEv08SE1dKxcmpTFJRTSe", "Masculino");
 insert into usuario (codigo, acesso, data_nascimento, email, nome, senha, sexo) values (2, now(), "1987-09-15", "paulo@vipautomacao.com.br", "Paulo Victor Batista Binatto", "$2a$12$9VgVhPuWu8rGF21Fug0Xue6/oK7VsKkwVzHiXRsutDRTJxbMhFtym", "Masculino");
+insert into usuario (codigo, acesso, data_nascimento, email, nome, senha, sexo) values (3, now(), "1987-09-15", "thais@vipautomacao.com.br", "Thais R Manzano", "$2a$12$9VgVhPuWu8rGF21Fug0Xue6/oK7VsKkwVzHiXRsutDRTJxbMhFtym", "Feminino");
 
-insert into conta (codigo, descricao, nome, saldo_inicial, banco) values (1, "Bradesco", "Bradesco", 100.50, 1);
-insert into conta (codigo, descricao, nome, saldo_inicial, banco) values (2, "Itau Desc", "Itau", 0, 2);
+insert into conta (codigo, descricao, nome, saldo_inicial, saldo_final, banco, usuario, cancelado, data_cancel, data_cadastro) values (1, "Bradesco", "Bradesco", 100.50, 400.50, 1, 1, false, null, now());
+insert into conta (codigo, descricao, nome, saldo_inicial, saldo_final, banco, usuario, cancelado, data_cancel, data_cadastro) values (2, "Itau Desc", "Itau", 0, -300, 2, 2, false, null, now());
+insert into conta (codigo, descricao, nome, saldo_inicial, saldo_final, banco, usuario, cancelado, data_cancel, data_cadastro) values (3, "Santander Cancelado", "Santander", 0, 0, 3, 1, true, now(), now());
 
-insert into cartao (codigo, fechamento, limite, vencimento, conta_pagamento, instituicao, usuario) values (1, 23, 28000, 13, 1, 1, 1);
+insert into cartao (codigo, fechamento, limite, vencimento, conta_pagamento, instituicao, usuario, cancelado, data_cancel, data_cadastro) values (1, 23, 28000, 13, 1, 1, 1, false, null, now());
+insert into cartao (codigo, fechamento, limite, vencimento, conta_pagamento, instituicao, usuario, cancelado, data_cancel, data_cadastro) values (2, 10, 3000, 1, 2, 1, 2, false, null, now());
 
 insert into categoria (codigo, descricao, tipo) values (1, "Alimentação", "S");
 insert into categoria (codigo, descricao, tipo) values (2, "Assinatura", "S");
 insert into categoria (codigo, descricao, tipo) values (3, "Salário", "E");
 insert into categoria (codigo, descricao, tipo) values (4, "Rendimento", "E");
 
-insert into lancamento (codigo, codigo_pai, data, descricao, observacao, parcela_fixa, qtd_parcela, tipo_lancamento, valor, categoria, conta, conta2, usuario) values (1, null, now(), "Entrada de 100 reais", "", false, 1, "E", 100, 3, 1, null, 1);
+insert into lancamento (codigo, codigo_pai, data, descricao, observacao, parcela_fixa, qtd_parcela, tipo_lancamento, valor, categoria, conta, conta2, usuario, cancelado, data_cancel, data_cadastro, pago) values (1, null, '2021-10-01 10:23:23', "Entrada de 100 reais", "", false, 1, "E", 100, 3, 1, null, 1, false, null, now(), true);
+insert into lancamento (codigo, codigo_pai, data, descricao, observacao, parcela_fixa, qtd_parcela, tipo_lancamento, valor, categoria, conta, conta2, usuario, cancelado, data_cancel, data_cadastro, pago) values (2, null, '2021-10-02 10:23:23', "Entrada de 200 reais", "", false, 1, "E", 200, 3, 2, null, 2, false, null, now(), true);
+insert into lancamento (codigo, codigo_pai, data, descricao, observacao, parcela_fixa, qtd_parcela, tipo_lancamento, valor, categoria, conta, conta2, usuario, cancelado, data_cancel, data_cadastro, pago) values (3, null, '2021-10-03 10:23:23', "Entrada de 300 reais", "", false, 1, "E", 300, 3, 1, null, 1, false, null, now(), true);
+insert into lancamento (codigo, codigo_pai, data, descricao, observacao, parcela_fixa, qtd_parcela, tipo_lancamento, valor, categoria, conta, conta2, usuario, cancelado, data_cancel, data_cadastro, pago) values (4, null, '2021-10-04 10:23:23', "Entrada de 400 reais", "", false, 1, "E", 400, 3, 2, null, 2, false, null, now(), true);
+insert into lancamento (codigo, codigo_pai, data, descricao, observacao, parcela_fixa, qtd_parcela, tipo_lancamento, valor, categoria, conta, conta2, usuario, cancelado, data_cancel, data_cadastro, pago) values (5, null, '2021-10-05 10:23:23', "Entrada de 500 reais", "", false, 1, "E", 500, 3, 1, null, 1, false, null, now(), true);
+insert into lancamento (codigo, codigo_pai, data, descricao, observacao, parcela_fixa, qtd_parcela, tipo_lancamento, valor, categoria, conta, conta2, usuario, cancelado, data_cancel, data_cadastro, pago) values (6, null, '2021-10-06 10:23:23', "Saida de 100 reais", "", false, 1, "S", 100, 3, 2, null, 2, false, null, now(), true);
+insert into lancamento (codigo, codigo_pai, data, descricao, observacao, parcela_fixa, qtd_parcela, tipo_lancamento, valor, categoria, conta, conta2, usuario, cancelado, data_cancel, data_cadastro, pago) values (7, null, '2021-10-07 10:23:23', "Saida de 200 reais", "", false, 1, "S", 200, 3, 1, null, 1, false, null, now(), true);
+insert into lancamento (codigo, codigo_pai, data, descricao, observacao, parcela_fixa, qtd_parcela, tipo_lancamento, valor, categoria, conta, conta2, usuario, cancelado, data_cancel, data_cadastro, pago) values (8, null, '2021-10-08 10:23:23', "Saida de 300 reais", "", false, 1, "S", 300, 3, 2, null, 2, false, null, now(), true);
+insert into lancamento (codigo, codigo_pai, data, descricao, observacao, parcela_fixa, qtd_parcela, tipo_lancamento, valor, categoria, conta, conta2, usuario, cancelado, data_cancel, data_cadastro, pago) values (9, null, '2021-10-09 10:23:23', "Saida de 400 reais", "", false, 1, "S", 400, 3, 1, null, 1, false, null, now(), true);
+insert into lancamento (codigo, codigo_pai, data, descricao, observacao, parcela_fixa, qtd_parcela, tipo_lancamento, valor, categoria, conta, conta2, usuario, cancelado, data_cancel, data_cadastro, pago) values (10, null, '2021-10-10 10:23:23', "Saida de 500 reais", "", false, 1, "S", 500, 3, 2, null, 2, false, null, now(), true);
 
-create table oauth_client_details (client_id varchar(255), resource_ids varchar(256), client_secret varchar(256), scope varchar(256), authorized_grant_types varchar(256), web_server_redirect_uri varchar(256), authorities varchar(256), access_token_validity integer, refresh_token_validity integer, additional_information varchar(4096), autoapprove varchar(256), primary key (client_id)) engine=innodb default charset=utf8;
 
 insert into oauth_client_details (client_id, resource_ids, client_secret, scope, authorized_grant_types, web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity, additional_information, autoapprove) values ("usuario", "", "$2a$12$V9Pj/dYugHZTSoU46vJl6OtPPuiMPH2FeEv08SE1dKxcmpTFJRTSe", "READ,WRITE", "password" , "", "CONSULTAR_PEDIDOS,GERAR_RELATORIOS", null, null, null, null);
 
@@ -61,11 +89,23 @@ insert into permissao (codigo, nome, descricao) values (1, "GERENCIAR_USUARIOS",
 insert into permissao (codigo, nome, descricao) values (2, "GERENCIAR_CATEGORIAS", "Permite Gerenciar Categorias");
 insert into permissao (codigo, nome, descricao) values (3, "GERENCIAR_BANCOS", "Permite Gerenciar Bancos");
 insert into permissao (codigo, nome, descricao) values (4, "GERENCIAR_INSTITUICOES", "Permite Gerenciar Instituições");
+insert into permissao (codigo, nome, descricao) values (5, "GERENCIAR_CARTOES", "Permite Gerenciar Cartões");
+insert into permissao (codigo, nome, descricao) values (6, "GERENCIAR_CONTAS", "Permite Gerenciar Contas");
+insert into permissao (codigo, nome, descricao) values (7, "GERENCIAR_GRUPO", "Permite Gerenciar Grupos");
+insert into permissao (codigo, nome, descricao) values (8, "GERENCIAR_LANCAMENTOS", "Permite Gerenciar Lançamentos");
+insert into permissao (codigo, nome, descricao) values (9, "GERENCIAR_PERMISSOES", "Permite Gerenciar Permissões");
 
 insert into grupo_permissao (grupo_id, permissao_id) values (1, 1);
 insert into grupo_permissao (grupo_id, permissao_id) values (1, 2);
 insert into grupo_permissao (grupo_id, permissao_id) values (1, 3);
 insert into grupo_permissao (grupo_id, permissao_id) values (1, 4);
+insert into grupo_permissao (grupo_id, permissao_id) values (1, 5);
+insert into grupo_permissao (grupo_id, permissao_id) values (1, 6);
+insert into grupo_permissao (grupo_id, permissao_id) values (1, 7);
+insert into grupo_permissao (grupo_id, permissao_id) values (1, 8);
+insert into grupo_permissao (grupo_id, permissao_id) values (1, 9);
 
 insert into usuario_grupo (usuario_id, grupo_id) values (2, 1);
+
+update categoria set cancelado = false;
 

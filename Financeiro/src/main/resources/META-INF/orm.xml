@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings
+	xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/orm_2_2.xsd"
+	version="2.2">
+
+	<named-query name="Cartao.temResponsavel">
+		<query>
+		select case when count(1) > 0 then true else false end
+		from Cartao cart
+		where cart.codigo = :cartaoId
+		and cart.usuario.codigo = :usuarioId
+		</query>
+	</named-query>
+	
+	<named-query name="Conta.temResponsavel">
+		<query>
+		select case when count(1) > 0 then true else false end
+		from Conta c
+		where c.codigo = :contaId
+		and c.usuario.codigo = :usuarioId
+		</query>
+	</named-query>
+	
+	<named-query name="Categoria.temResponsavel">
+		<query>
+		select case when count(1) > 0 then true else false end
+		from Categoria c
+		where c.codigo = :categoriaId
+		and c.usuario.codigo = :usuarioId
+		</query>
+	</named-query>
+	
+	<named-query name="Lancamento.temResponsavel">
+		<query>
+		select case when count(1) > 0 then true else false end
+		from Lancamento l
+		where l.codigo = :lancamentoId
+		and l.usuario.codigo = :usuarioId
+		</query>
+	</named-query>
+
+</entity-mappings>

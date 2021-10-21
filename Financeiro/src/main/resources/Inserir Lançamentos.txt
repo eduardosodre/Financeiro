@@ -1,0 +1,61 @@
+{
+    "descricao": "Salário de 200 reais",
+    "valor": 200.0,
+    "data": "2021-10-19T10:23:23Z",
+    "conta": {
+        "codigo": 3
+    },
+    "categoria": {
+        "codigo": 3
+    },
+    "pago": true,
+    "tipoLancamento": "E",
+    "observacao": "",
+    "parcelaFixa": false,
+    "qtdParcela": 1,
+    "codigoPai": null
+}
+
+---------------------------------------------------------
+
+{
+    "descricao": "Pagamento de 100 Reais",
+    "valor": 100.0,
+    "data": "2021-10-19T22:23:23Z",
+    "conta": {
+        "codigo": 3
+    },
+    "categoria": {
+        "codigo": 3
+    },
+    "pago": true,
+    "tipoLancamento": "S",
+    "observacao": "",
+    "parcelaFixa": false,
+    "qtdParcela": 1,
+    "codigoPai": null
+}
+
+---------------------------------------------------------
+
+
+{
+    "descricao": "Transf de 50 Reais",
+    "valor": 50.0,
+    "data": "2021-10-19T22:23:23Z",
+    "conta": {
+        "codigo": 1
+    },
+    "categoria": {
+        "codigo": 3
+    },
+    "conta2": {
+        "codigo": 3
+    },
+    "pago": false,
+    "tipoLancamento": "T",
+    "observacao": "",
+    "parcelaFixa": false,
+    "qtdParcela": 1,
+    "codigoPai": null
+}

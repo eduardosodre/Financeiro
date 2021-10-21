@@ -8,7 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.vipautomacao.domain.exception.EntidadeEmUsoException;
 import br.com.vipautomacao.domain.exception.ContaNaoEncontradoException;
+import br.com.vipautomacao.domain.model.Banco;
 import br.com.vipautomacao.domain.model.Conta;
+import br.com.vipautomacao.domain.model.Usuario;
 import br.com.vipautomacao.domain.repository.ContaRepository;
 
 @Service
@@ -20,9 +22,20 @@ public class ContaService {
 	@Autowired
 	private ContaRepository contaRepository;
 
+	@Autowired
+	private UsuarioService usuarioService;
+	
+	@Autowired
+	private BancoService bancoService;
 
 	@Transactional
 	public Conta salvar(Conta objeto) {
+		Usuario usuario = usuarioService.buscarOuFalhar(objeto.getUsuario().getCodigo());
+		Banco banco = bancoService.buscarOuFalhar(objeto.getBanco().getCodigo());
+		
+		objeto.setUsuario(usuario);
+		objeto.setBanco(banco);
+		
 		return contaRepository.save(objeto);
 	}
 

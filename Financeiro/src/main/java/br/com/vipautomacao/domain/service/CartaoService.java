@@ -6,9 +6,12 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.vipautomacao.domain.exception.EntidadeEmUsoException;
 import br.com.vipautomacao.domain.exception.CartaoNaoEncontradoException;
+import br.com.vipautomacao.domain.exception.EntidadeEmUsoException;
 import br.com.vipautomacao.domain.model.Cartao;
+import br.com.vipautomacao.domain.model.Conta;
+import br.com.vipautomacao.domain.model.InstituicaoFinanceira;
+import br.com.vipautomacao.domain.model.Usuario;
 import br.com.vipautomacao.domain.repository.CartaoRepository;
 
 @Service
@@ -19,11 +22,29 @@ public class CartaoService {
 		= "Cartao de código %d não pode ser removido, pois está em uso";
 	@Autowired
 	private CartaoRepository cartaoRepository;
+	
+	@Autowired
+	private ContaService contaService;
+	
+	@Autowired
+	private InstituicaoFinanceiraService instituicaoService;
+	
+	@Autowired
+	private UsuarioService usuarioService;
 
 
 	@Transactional
-	public Cartao salvar(Cartao objeto) {
-		return cartaoRepository.save(objeto);
+	public Cartao salvar(Cartao cartao) {
+		Conta conta = contaService.buscarOuFalhar(cartao.getContaPagamento().getCodigo());
+		InstituicaoFinanceira instituicao = instituicaoService.buscarOuFalhar(cartao.getInstituicao().getCodigo());
+		Usuario usuario = usuarioService.buscarOuFalhar(cartao.getUsuario().getCodigo());
+		
+		cartao.setContaPagamento(conta);
+		cartao.setInstituicao(instituicao);
+		cartao.setUsuario(usuario);
+		
+		
+		return cartaoRepository.save(cartao);
 	}
 
 

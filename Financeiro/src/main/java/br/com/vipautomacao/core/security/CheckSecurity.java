@@ -5,7 +5,10 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
+
+import br.com.vipautomacao.domain.model.EPermissao;
 
 public @interface CheckSecurity {
 
@@ -30,6 +33,11 @@ public @interface CheckSecurity {
 		@Target(METHOD)
 		public @interface PodeGerenciar { }
 		
+		@PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		public @interface PodeConsultar {}
+		
 	}
 
 	public @interface InstituicaoFinanceira {
@@ -39,19 +47,38 @@ public @interface CheckSecurity {
 		@Target(METHOD)
 		public @interface PodeGerenciar { }
 		
+		@PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		public @interface PodeConsultar {}
+		
 	}
 
 	public @interface Conta {
 		
-		@PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDITAR_CONTA')")
+		@PreAuthorize("hasAuthority('SCOPE_WRITE') and isAuthenticated()")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		public @interface PodeCriar { }
+		
+		@PreAuthorize("(hasAuthority('GERENCIAR_CONTAS') or @vipSecurity.podeGerenciarContas(#contaId))")
 		@Retention(RUNTIME)
 		@Target(METHOD)
 		public @interface PodeEditar { }
 
-		@PreAuthorize("@vipSecurity.podeConsultarConta()")
+		@PreAuthorize("@vipSecurity.podeConsultarContas()")
 		@Retention(RUNTIME)
 		@Target(METHOD)
 		public @interface PodeConsultar { }
+		
+		
+		@PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+		@PostAuthorize("hasAuthority('GERENCIAR_CONTAS') or "
+				+ "@vipSecurity.usuarioAutenticadoIgual(returnObject.usuario.codigo) or "
+				+ "@vipSecurity.podeGerenciarContas(returnObject.codigo)")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		public @interface PodeBuscar { }
 		
 	}
 
@@ -62,7 +89,7 @@ public @interface CheckSecurity {
 		@Target(METHOD)
 		public @interface PodeEditar { }
 
-		@PreAuthorize("@vipSecurity.podeConsultarCartao()")
+		@PreAuthorize("@vipSecurity.podeGerenciarCartoes(#cartaoId)")
 		@Retention(RUNTIME)
 		@Target(METHOD)
 		public @interface PodeConsultar { }
@@ -71,29 +98,58 @@ public @interface CheckSecurity {
 
 	public @interface Lancamento {
 		
-		@PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDITAR_LANCAMENTO')")
+
+		@PreAuthorize("@vipSecurity.podeConsultarLancamentos()")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		public @interface PodeConsultar { }
+		
+		
+		@PreAuthorize("hasAuthority('SCOPE_WRITE') and isAuthenticated()")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		public @interface PodeCriar { }
+		
+		@PreAuthorize("(hasAuthority('GERENCIAR_LANCAMENTOS') or @vipSecurity.podeGerenciarLancamentos(#lancamentoId))")
 		@Retention(RUNTIME)
 		@Target(METHOD)
 		public @interface PodeEditar { }
 
-		@PreAuthorize("@vipSecurity.podeConsultarLancamento()")
+		@PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+		@PostAuthorize("hasAuthority('GERENCIAR_LANCAMENTOS') or "
+				+ "@vipSecurity.usuarioAutenticadoIgual(returnObject.usuario.codigo) or "
+				+ "@vipSecurity.podeGerenciarLancamentos(returnObject.codigo)")
 		@Retention(RUNTIME)
 		@Target(METHOD)
-		public @interface PodeConsultar { }
+		public @interface PodeBuscar { }
 		
 	}
 
 	public @interface Categoria {
 		
-		@PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDITAR_CATEGORIA')")
+		@PreAuthorize("@vipSecurity.podeConsultarCategorias()")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		public @interface PodeConsultar { }
+		
+		
+		@PreAuthorize("hasAuthority('SCOPE_WRITE') and isAuthenticated()")
+		@Retention(RUNTIME)
+		@Target(METHOD)
+		public @interface PodeCriar { }
+		
+		@PreAuthorize("(hasAuthority('GERENCIAR_CATEGORIAS') or @vipSecurity.podeGerenciarCategorias(#categoriaId))")
 		@Retention(RUNTIME)
 		@Target(METHOD)
 		public @interface PodeEditar { }
 
-		@PreAuthorize("@vipSecurity.podeConsultarCategoria()")
+		@PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+		@PostAuthorize("hasAuthority('GERENCIAR_CATEGORIAS') or "
+				+ "@vipSecurity.usuarioAutenticadoIgual(returnObject.usuario.codigo) or "
+				+ "@vipSecurity.podeGerenciarCategorias(returnObject.codigo)")
 		@Retention(RUNTIME)
 		@Target(METHOD)
-		public @interface PodeConsultar { }
+		public @interface PodeBuscar { }
 		
 	}
 

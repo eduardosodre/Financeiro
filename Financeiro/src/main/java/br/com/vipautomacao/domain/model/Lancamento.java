@@ -1,5 +1,7 @@
 package br.com.vipautomacao.domain.model;
+
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +12,9 @@ import javax.persistence.Id;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.CreationTimestamp;
+
 import java.util.Date;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -23,34 +28,41 @@ public class Lancamento {
 	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="CODIGO"  )
+	@Column(name = "CODIGO")
 	private Integer codigo;
-	@Column(name="descricao"  )
+	@Column(name = "descricao")
 	private String descricao;
-	@Column(name="valor"  )
+	@Column(name = "valor")
 	private Double valor;
-	@Column(name="data"  )
-	private Date data;
+	@Column(name = "data")
+	private OffsetDateTime data;
 	@ManyToOne
-	@JoinColumn(name="conta")
+	@JoinColumn(name = "conta")
 	private Conta conta;
 	@ManyToOne
-	@JoinColumn(name="categoria")
+	@JoinColumn(name = "categoria")
 	private Categoria categoria;
-	@Column(name="tipoLancamento"  )
+	@Column(name = "tipoLancamento")
 	private String tipoLancamento;
 	@ManyToOne
-	@JoinColumn(name="conta2")
+	@JoinColumn(name = "conta2")
 	private Conta conta2;
-	@Column(name="observacao"  )
+	@Column(name = "observacao")
 	private String observacao;
-	@Column(name="parcelaFixa"  )
+	@Column(name = "parcelaFixa")
 	private Boolean parcelaFixa;
-	@Column(name="qtdParcela"  )
+	@Column(name = "qtdParcela")
 	private Integer qtdParcela;
-	@Column(name="codigoPai"  )
+	@Column(name = "codigoPai")
 	private Integer codigoPai;
 	@ManyToOne
-	@JoinColumn(name="usuario")
+	@JoinColumn(name = "usuario")
 	private Usuario usuario;
+	
+	private Boolean pago;
+
+	private Boolean cancelado;
+	private OffsetDateTime dataCancel;
+	@CreationTimestamp
+	private OffsetDateTime dataCadastro;
 }

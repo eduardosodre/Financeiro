@@ -2,6 +2,7 @@ package br.com.vipautomacao.api.v1.openapi.controller.conta;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import br.com.vipautomacao.api.exceptionhandler.Problem;
 

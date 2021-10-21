@@ -7,5 +7,7 @@ import br.com.vipautomacao.domain.model.Lancamento;
 public interface LancamentoQueryService {
 
 	List<Lancamento> consultaPorFiltro(LancamentoFilter filtro, String timeOffset, Pageable pageable);
+
+	List<Lancamento> consultaPorUsuario(Integer usuario, Pageable pageable);
 	
 }
